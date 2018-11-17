@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>串口测试</title>
+</head>
+<body>
+    <div  id="showData" style="height: 300px;width: 400px;background-color:#ccc;display: inline-block" >
+    </div>
+    <hr>
+        <textarea name="data" id="data" cols="30" rows="10"></textarea>
+    <div>
+        <button onclick="send()">发送</button>
+    </div>
+<script>
+    var  ws=new WebSocket("ws://localhost:8080/test")
+    ws.onopen=function (ev) {
+        console.log(ev)
+    }
+
+    function send() {
+        var text = document.getElementById("data").value;
+        ws.send(text);
+        console.log(text)
+    }
+    // 接收服务端数据时触发事件
+    ws.onmessage = function (evt) {
+        var received_msg = evt.data;
+        console.log(received_msg)
+        document.getElementById("showData").innerText=received_msg;
+    };
+
+    // 断开 web socket 连接成功触发事件
+    ws.onclose = function () {
+        alert("连接已关闭...");
+    };
+
+
+</script>
+
+</body>
+</html>
