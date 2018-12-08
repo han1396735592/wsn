@@ -63,7 +63,6 @@ public class SerialController {
         SerialPort serialPort = SerialContext.getSerialPort();
         log.info("关闭了串口：{}"+serialPort);
         serialPort.close();
-        serialPort=null;
         SerialContext.setSerialPort(null);
         return true;
     }
@@ -80,7 +79,7 @@ public class SerialController {
             map.put("dataBits",serialPort.getDataBits());
             map.put("parity",serialPort.getParity());
         }else {
-            map.put("portName","");
+            map.put("err","serial is close");
         }
         return map;
     }

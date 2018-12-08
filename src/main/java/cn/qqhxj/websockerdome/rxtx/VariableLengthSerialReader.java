@@ -20,7 +20,6 @@ public class VariableLengthSerialReader implements SerialReader {
     private char endChar  = '}';
 
     private boolean haveNext = false;
-//    private Character lastRead = null;
 
 
     public VariableLengthSerialReader(InputStream inputStream){
@@ -36,6 +35,17 @@ public class VariableLengthSerialReader implements SerialReader {
 
     @Override
     public String readString() {
+        byte[] bytes = readBytes();
+        if (bytes!=null){
+            if (bytes.length>0){
+                return   new String(readBytes());
+            }
+        }
+       return null;
+    }
+
+    @Override
+    public byte[] readBytes() {
         int ch = 0;
         while (ch!=-1){
             try {
@@ -61,7 +71,7 @@ public class VariableLengthSerialReader implements SerialReader {
         if (byteBuffer.position()!=0){
             byte[] array = Arrays.copyOf(byteBuffer.array(),byteBuffer.position());
             byteBuffer = ByteBuffer.allocate(1024);
-            return new String(array);
+            return array;
         }
 
         return null;

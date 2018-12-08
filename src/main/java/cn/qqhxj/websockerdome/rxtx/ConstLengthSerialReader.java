@@ -8,7 +8,7 @@ import java.io.InputStream;
  * @author han xinjian
  * @date 2018-12-03 12:58
  **/
-public class ConstLengthSerialReader implements  SerialReader {
+public class ConstLengthSerialReader implements SerialReader {
 
     private InputStream inputStream;
 
@@ -22,13 +22,24 @@ public class ConstLengthSerialReader implements  SerialReader {
 
 
     @Override
-    public String readString()   {
-        for ( ;index<length;index++){
+    public String readString() {
+        byte[] bytes = readBytes();
+        if (bytes!=null){
+            if (bytes.length>0){
+                return   new String(readBytes());
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public byte[] readBytes() {
+        for (; index < length; index++) {
             try {
                 int read = inputStream.read();
-                if (read==-1){
+                if (read == -1) {
                     break;
-                }else{
+                } else {
                     bytes[index] = (byte) read;
                 }
             } catch (IOException e) {
@@ -36,27 +47,24 @@ public class ConstLengthSerialReader implements  SerialReader {
             }
         }
 
-        if (index==length){
-            index=0;
-            return new String(bytes);
+        if (index == length) {
+            index = 0;
+            return bytes;
         }
-
         return null;
     }
 
-    public  ConstLengthSerialReader(InputStream inputStream){
+    public ConstLengthSerialReader(InputStream inputStream) {
         this.inputStream = inputStream;
         length = 24;
         bytes = new byte[length];
     }
 
-    ConstLengthSerialReader(InputStream inputStream,int length){
+    ConstLengthSerialReader(InputStream inputStream, int length) {
         this.inputStream = inputStream;
         this.length = length;
         bytes = new byte[length];
     }
-
-
 
 
     public static void main(String[] args) {
@@ -64,17 +72,14 @@ public class ConstLengthSerialReader implements  SerialReader {
         String str = "{as}{sa{asfasf}as{f}}saa{}s{f}";
 
         SerialReader serialReader =
-        new VariableLengthSerialReader(new ByteArrayInputStream(str.getBytes()),'{','}');
+                new VariableLengthSerialReader(new ByteArrayInputStream(str.getBytes()), '{', '}');
 
         String string = serialReader.readString();
 
-        while (string!=null){
+        while (string != null) {
             System.out.println(string);
             string = serialReader.readString();
         }
-
-
-
 
     }
 }
