@@ -38,6 +38,8 @@ public class SerialUtils {
      * @throws Exception  串口连接失败
      */
     public static SerialPort connect ( String portName,int  baudRgot ,int dataBits,int stopBits,int parity ) throws Exception{
+
+        System.out.println(portName+"  "+baudRgot+" "+dataBits+" " +stopBits+" "+parity);
         CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
         if ( portIdentifier.isCurrentlyOwned() )
         {
@@ -50,7 +52,7 @@ public class SerialUtils {
             if ( commPort instanceof SerialPort )
             {
                 SerialPort serialPort = (SerialPort) commPort;
-                serialPort.setSerialPortParams(57600,dataBits,stopBits,parity);
+                serialPort.setSerialPortParams(baudRgot,dataBits,stopBits,parity);
 
                 return (SerialPort) commPort;
             }
@@ -112,19 +114,5 @@ public class SerialUtils {
             return false;
         }
     }
-    public static  byte[] readData(SerialPort serialPort) {
-        byte[] rbuff = new byte[1024];
-        int hasRead = 0;
-        StringBuffer stringBuffer = new StringBuffer("");
-        try {
-            while((hasRead=serialPort.getInputStream().read(rbuff)) !=-1) {
-                stringBuffer.append(new String(rbuff, 0, hasRead));
-                break;
-            }
-            return stringBuffer.toString().getBytes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 }

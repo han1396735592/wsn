@@ -1,42 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>串口测试</title>
+	<meta charset="UTF-8">
+	<title>串口控制台</title>
+	<script src="jquery.js"></script>
+	<script type="text/javascript" src="vue.js"></script>
+	<script src="echarts.min.js"></script>
+	<script type="text/javascript" src="index.js"></script>
+	<link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-    <div  id="showData" style="height: 300px;width: 400px;background-color:#ccc;display: inline-block" >
-    </div>
-    <hr>
-        <textarea name="data" id="data" cols="30" rows="10"></textarea>
-    <div>
-        <button onclick="send()">发送</button>
-    </div>
-<script>
-    var  ws=new WebSocket("ws://localhost:8080/test")
-    ws.onopen=function (ev) {
-        console.log(ev)
-    }
+	
+	<div id="console">
+		
+		<div class="title ">
+			<h3 align="center"> 串口控制台</h3>
+		</div>
 
-    function send() {
-        var text = document.getElementById("data").value;
-        ws.send(text);
-        console.log(text)
-    }
-    // 接收服务端数据时触发事件
-    ws.onmessage = function (evt) {
-        var received_msg = evt.data;
-        console.log(received_msg)
-        document.getElementById("showData").innerText=received_msg;
-    };
+		<div class="body">
+			<div class="body-left">
+				<div class="select-group">
+					<ul>
+						<li>
+							<div class="input-item">
+								<div class="input-item-title">
+									端口号
+								</div>
 
-    // 断开 web socket 连接成功触发事件
-    ws.onclose = function () {
-        alert("连接已关闭...");
-    };
+								<div class="input-item-value">
+									<select  v-model="portInfo.portName"  required>
+										<option  v-for="portName in portNameList"   :value="portName" >{{portName}}</option>
+									</select>
+								</div>
+
+							</div>
+						</li>
+						<li>
+							<div class="input-item">
+								<div class="input-item-title">
+									波特率
+								</div>
+
+								<div class="input-item-value">
+									<select  v-model="portInfo.baudRgot" required >
+										<option  v-for="baudRgot in baudRgotList"   :value="baudRgot" >{{baudRgot}}</option>
+									</select>
+								</div>
+
+							</div>
+						</li>
+						<li>
+							<div class="input-item">
+								<div class="input-item-title">
+									数据位
+								</div>
+
+								<div class="input-item-value">
+									<select  v-model="portInfo.dataBits"  >
+										<option  v-for="dataBits in dataBitsList"   :value="dataBits" >{{dataBits}}</option>
+									</select>
+								</div>
+
+							</div>
+						</li>
+						<li>
+							<div class="input-item">
+								<div class="input-item-title">
+									停止位
+								</div>
+
+								<div class="input-item-value">
+									<select  v-model="portInfo.stopBits"  >
+										<option  v-for="stopBits in stopBitsList"   :value="stopBits" >{{stopBits}}</option>
+									</select>
+								</div>
+
+							</div>
+						</li>
+
+						<li>
+							<div class="input-item">
+								<div class="input-item-title">
+									校验位
+								</div>
+
+								<div class="input-item-value">
+									<select  v-model="portInfo.parity"  >
+										<option  v-for="parity in parityList"   :value="parity" >{{parity}}</option>
+									</select>
+								</div>
+
+							</div>
+						</li>
+					</ul>
+				</div>
+
+				<!--<div class="status">-->
+
+					<!--<div class="status-info">-->
+					<!--</div>-->
 
 
-</script>
+				<!--</div>-->
+				<div class="actions" style="margin: 0 auto">
+					<div   @click="openOrClose" id="status-led"  class="status-led"></div>
+				</div>
+
+			</div>
+
+			<div class="body-right">
+				<div id="Humidity"></div>
+				<div id="Temperature"></div>
+			</div>
+
+		</div>
+
+
+		</div>
+
+
+
+
+	</div>
+
+
 
 </body>
 </html>
