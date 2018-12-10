@@ -1,6 +1,5 @@
 package cn.qqhxj.websockerdome.rxtx;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -37,9 +36,9 @@ public class LiveControlSerialReader implements SerialReader {
     @Override
     public String readString() {
         byte[] bytes = readBytes();
-        if (bytes != null) {
-            if (bytes.length > 0) {
-                return new String(readBytes());
+        if (bytes!=null){
+            if (bytes.length>0){
+                return   new String(bytes);
             }
         }
         return null;
@@ -47,42 +46,31 @@ public class LiveControlSerialReader implements SerialReader {
 
     @Override
     public byte[] readBytes() {
-        if (notOver) {
-            try {
-                int bt = inputStream.read();
-
-                if (allLength == dataLengthIndex) {
-                    length = bt;
-                }
-                if (allLength > flagIndex) {
-                    length -= 1;
-                }
-
-                if (length == 0) {
-                    notOver = false;
-                    byte[] array = Arrays.copyOf(byteBuffer.array(), byteBuffer.position());
-                    byteBuffer = ByteBuffer.allocate(1024);
-                    return array;
-                }
-                allLength += 1;
-                byteBuffer.put((byte) bt);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                byte read = ((byte) inputStream.read());
-                int index = Arrays.binarySearch(startChat, read);
-                if (index!=-1) {
-                    byteBuffer.put((byte) read);
+        try {
+            byte read = ((byte) inputStream.read());
+            int index = Arrays.binarySearch(startChat, read);
+            if (index>=0) {
+                byteBuffer.put((byte) read);
+                allLength = 1;
+                notOver = true;
+            }else{
+                if (notOver){
+                    if (allLength == dataLengthIndex) {
+                        length = read;
+                    }
                     allLength += 1;
-                    notOver = true;
-                } else {
-                    return null;
+                    byteBuffer.put((byte) read);
+                    if (allLength == flagIndex+length) {
+                        notOver = false;
+                        byte[] array = Arrays.copyOf(byteBuffer.array(), byteBuffer.position());
+                        byteBuffer = ByteBuffer.allocate(1024);
+                        allLength = 0;
+                        return array;
+                    }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

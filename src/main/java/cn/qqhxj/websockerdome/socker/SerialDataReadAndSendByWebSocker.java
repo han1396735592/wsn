@@ -29,13 +29,13 @@ public class SerialDataReadAndSendByWebSocker implements SerialPortEventListener
         if(ev.getEventType()==SerialPortEvent.DATA_AVAILABLE){
 
 
-            String data = SerialContext.readData();
+            byte[] bytes = SerialContext.readBytes();
 
-            while (data!=null){
-                log.info("接收到了串口发送的数据:={}=",data);
+            while (bytes!=null){
+                log.info("接收到了串口发送的数据:{}",bytes);
                 if(!sessionSet.isEmpty()){
                     for (WebSocketSession session: sessionSet){
-                        WebSocketMessage<String> message = new TextMessage(data);
+                        WebSocketMessage<String> message = new TextMessage(bytes);
                         try {
                             session.sendMessage(message);
                         } catch (IOException e) {
@@ -47,7 +47,7 @@ public class SerialDataReadAndSendByWebSocker implements SerialPortEventListener
                 }else{
                     log.info("没有人在线，没有人接收到数据");
                 }
-                data = SerialContext.readData();
+                bytes = SerialContext.readBytes();
             }
 
         }else{

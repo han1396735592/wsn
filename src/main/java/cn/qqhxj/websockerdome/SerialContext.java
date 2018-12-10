@@ -1,8 +1,9 @@
 package cn.qqhxj.websockerdome;
 
+import cn.qqhxj.websockerdome.rxtx.LiveControlSerialReader;
 import cn.qqhxj.websockerdome.rxtx.SerialReader;
 import cn.qqhxj.websockerdome.rxtx.SerialUtils;
-import cn.qqhxj.websockerdome.rxtx.VariableLengthSerialReader;
+import cn.qqhxj.websockerdome.wsn.SensorDataInfo;
 import gnu.io.SerialPort;
 
 import java.io.IOException;
@@ -25,18 +26,22 @@ public class SerialContext {
         SerialContext.serialPort = serialPort;
         try {
             if (serialPort!=null){
-                serialReader = new VariableLengthSerialReader(serialPort.getInputStream(),'{','}');
+                serialReader = new LiveControlSerialReader(serialPort.getInputStream(), SensorDataInfo.FLAG_INDEX,SensorDataInfo.DADA_LENGTH_INDEX, SensorDataInfo.header);
+                //serialReader = new VariableLengthSerialReader(serialPort.getInputStream(),'{','}');
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static byte[] readBytes(){
+        return serialReader.readBytes();
+    }
+
     public static String readData(){
         return serialReader.readString();
     }
     public static  boolean sendDate(String data){
-
         return SerialUtils.sendData(serialPort,data.getBytes());
     }
 

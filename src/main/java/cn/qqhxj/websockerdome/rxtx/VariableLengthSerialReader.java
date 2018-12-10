@@ -38,7 +38,7 @@ public class VariableLengthSerialReader implements SerialReader {
         byte[] bytes = readBytes();
         if (bytes!=null){
             if (bytes.length>0){
-                return   new String(readBytes());
+                return   new String(bytes);
             }
         }
        return null;
