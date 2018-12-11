@@ -1,4 +1,4 @@
-package cn.qqhxj.websockerdome.rxtx;
+package cn.qqhxj.websockerdome.rxtx.ReaderAndWrite;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,7 +73,6 @@ public class VariableLengthSerialReader implements SerialReader {
             byteBuffer = ByteBuffer.allocate(1024);
             return array;
         }
-
         return null;
     }
 }

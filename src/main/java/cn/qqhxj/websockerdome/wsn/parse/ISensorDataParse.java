@@ -1,5 +1,6 @@
 package cn.qqhxj.websockerdome.wsn.parse;
 
+import cn.qqhxj.websockerdome.rxtx.core.SerialDataParser;
 import cn.qqhxj.websockerdome.wsn.sensor.Sensor;
 
 /**
@@ -7,11 +8,6 @@ import cn.qqhxj.websockerdome.wsn.sensor.Sensor;
  * @date 2018-12-08 19:09
  **/
 @FunctionalInterface
-public interface ISensorDataParse {
-    /**
-     *  传感器数据解析
-     * @param bytes
-     * @return
-     */
-    Sensor parse(byte[] bytes);
+public interface ISensorDataParse extends SerialDataParser<Sensor> {
+
 }

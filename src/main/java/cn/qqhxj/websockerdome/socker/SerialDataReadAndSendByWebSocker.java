@@ -1,6 +1,6 @@
 package cn.qqhxj.websockerdome.socker;
 
-import cn.qqhxj.websockerdome.SerialContext;
+import cn.qqhxj.websockerdome.rxtx.SerialContext;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import lombok.extern.slf4j.Slf4j;

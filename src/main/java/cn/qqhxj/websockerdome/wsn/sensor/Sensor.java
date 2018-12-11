@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public abstract  class  Sensor {
 
-    private SensorType sensorType;
+    private String sensorType;
 
     private String ieeeAddress="";
 
@@ -21,16 +21,31 @@ public abstract  class  Sensor {
 
     public Sensor(byte[] bytes){
         char type = (char) bytes[SensorDataInfo.FLAG_INDEX];
-        sensorType = SensorType.valueOf(type+"");
+        sensorType = SensorType.valueOf(type+"").name;
+
+        StringBuffer sb = new StringBuffer("");
+
         for (int i = 0;i<SensorDataInfo.PARENT_ADDRESS_LENGTH;i++){
-            parentAddress += ((int) bytes[i + SensorDataInfo.PARENT_ADDRESS_START_INDEX]);
-        }
-        for (int i = 0;i<SensorDataInfo.ADDRESS_LENGTH;i++){
-            address += ((int) bytes[i + SensorDataInfo.ADDRESS_START_INDEX]);
+            sb.append ((int) bytes[i + SensorDataInfo.PARENT_ADDRESS_START_INDEX]);
+            sb.append(".");
         }
 
-        for (int i = bytes.length-SensorDataInfo.IEEE_ADDRESS_LENGTH;i<bytes.length;i++){
-            ieeeAddress += ((int) bytes[i]);
+        parentAddress = sb.substring(0,sb.length()-1);
+        sb=new StringBuffer("");
+
+
+        for (int i = 0;i<SensorDataInfo.ADDRESS_LENGTH;i++){
+            sb.append( ((int) bytes[i + SensorDataInfo.ADDRESS_START_INDEX]));
+            sb.append(".");
         }
+        address = sb.substring(0,sb.length()-1);
+        sb=new StringBuffer("");
+
+        for (int i = bytes.length-SensorDataInfo.IEEE_ADDRESS_LENGTH;i<bytes.length;i++){
+            sb.append( ((int) bytes[i]));
+            sb.append(".");
+        }
+
+        ieeeAddress = sb.substring(0,sb.length()-1);
     }
 }

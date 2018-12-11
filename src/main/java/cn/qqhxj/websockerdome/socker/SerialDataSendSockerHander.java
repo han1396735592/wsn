@@ -1,6 +1,6 @@
 package cn.qqhxj.websockerdome.socker;
 
-import cn.qqhxj.websockerdome.SerialContext;
+import cn.qqhxj.websockerdome.rxtx.SerialContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

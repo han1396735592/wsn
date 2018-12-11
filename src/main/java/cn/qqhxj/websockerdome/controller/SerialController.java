@@ -1,6 +1,6 @@
 package cn.qqhxj.websockerdome.controller;
 
-import cn.qqhxj.websockerdome.SerialContext;
+import cn.qqhxj.websockerdome.rxtx.SerialContext;
 import cn.qqhxj.websockerdome.rxtx.SerialUtils;
 import cn.qqhxj.websockerdome.socker.SerialDataReadAndSendByWebSocker;
 import cn.qqhxj.websockerdome.socker.SerialDataSendSockerHander;
