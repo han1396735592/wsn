@@ -1,6 +1,7 @@
 package cn.qqhxj.websockerdome.socker;
 
-import cn.qqhxj.websockerdome.rxtx.SerialContext;
+
+import cn.qqhxj.common.rxtx.SerialContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,7 +34,7 @@ public class SerialDataSendSockerHander extends TextWebSocketHandler {
         String payload = message.getPayload().toString();
         if(!StringUtils.isEmpty(payload))
         {
-            boolean sendDate = SerialContext.sendDate(payload);
+            boolean sendDate = SerialContext.sendData(payload.getBytes());
 
             if(sendDate){
                 log.info("{} 发送了数据到串口data={}",session,payload);

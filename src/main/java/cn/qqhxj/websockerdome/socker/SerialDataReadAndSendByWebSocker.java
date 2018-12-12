@@ -1,6 +1,6 @@
 package cn.qqhxj.websockerdome.socker;
 
-import cn.qqhxj.websockerdome.rxtx.SerialContext;
+import cn.qqhxj.common.rxtx.SerialContext;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class SerialDataReadAndSendByWebSocker implements SerialPortEventListener
         if(ev.getEventType()==SerialPortEvent.DATA_AVAILABLE){
 
 
-            byte[] bytes = SerialContext.readBytes();
+            byte[] bytes = SerialContext.readData();
 
             while (bytes!=null){
                 log.info("接收到了串口发送的数据:{}",bytes);
@@ -47,7 +47,7 @@ public class SerialDataReadAndSendByWebSocker implements SerialPortEventListener
                 }else{
                     log.info("没有人在线，没有人接收到数据");
                 }
-                bytes = SerialContext.readBytes();
+                bytes = SerialContext.readData();
             }
 
         }else{
