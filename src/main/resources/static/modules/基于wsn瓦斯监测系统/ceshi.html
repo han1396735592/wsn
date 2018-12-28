@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/jquery.js"></script>
+    <script type="text/javascript">
+      var stu = [
+        { "name": "张三", "sex": "男", "age": "20" },
+        { "name": "李四", "sex": "男", "age": "18" },
+        { "name": "王五", "sex": "男", "age": "19" }
+      ];
+      $(document).ready(function() {
+        var s = "";
+        for(var i = 0; i < stu.length; i++) {
+          s = "<tr><td>" + stu[i].name + "</td><td>" + stu[i].sex + "</td><td>" +
+            stu[i].age + "</td></tr>";
+          $("#tab").append(s);
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <table border="1px" id="tab">
+      <tr>
+        <td>姓名</td>
+        <td>性别</td>
+        <td>年龄</td>
+      </tr>
+    </table>
+  </body>
+</html>

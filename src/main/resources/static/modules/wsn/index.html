@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>串口控制台</title>
+    <script src="../../lib/jquery.js"></script>
+    <script type="text/javascript" src="../../lib/vue.js"></script>
+    <script src="../../lib/echarts.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../plugs/layui/css/layui.css">
+
+</head>
+<body>
+
+<div id="console">
+    <div class="body">
+        <div class="body-left">
+            <div class="select-group">
+                <ul>
+                    <li>
+                        <div class="input-item">
+                            <div class="input-item-title">
+                                端口号
+                            </div>
+
+                            <div class="input-item-value">
+                                <select v-model="portInfo.portName" required>
+                                    <option v-for="portName in portNameList" :value="portName">{{portName}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-item">
+                            <div class="input-item-title">
+                                波特率
+                            </div>
+
+                            <div class="input-item-value">
+                                <select v-model="portInfo.baudRgot" required>
+                                    <option v-for="baudRgot in baudRgotList" :value="baudRgot">{{baudRgot}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-item">
+                            <div class="input-item-title">
+                                数据位
+                            </div>
+
+                            <div class="input-item-value">
+                                <select v-model="portInfo.dataBits">
+                                    <option v-for="dataBits in dataBitsList" :value="dataBits">{{dataBits}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-item">
+                            <div class="input-item-title">
+                                停止位
+                            </div>
+
+                            <div class="input-item-value">
+                                <select v-model="portInfo.stopBits">
+                                    <option v-for="stopBits in stopBitsList" :value="stopBits">{{stopBits}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="input-item">
+                            <div class="input-item-title">
+                                校验位
+                            </div>
+
+                            <div class="input-item-value">
+                                <select v-model="portInfo.parity">
+                                    <option v-for="parity in parityList" :value="parity">{{parity}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="actions" style="margin: 0 auto">
+                <div @click="openOrClose" id="status-led" class="status-led"></div>
+            </div>
+
+        </div>
+
+
+        <div class="body-right">
+
+            <div class="receive_data">
+                <p v-for="data in receive_data">{{data}}</p>
+            </div>
+
+                <input type="text" style="margin: 20px 40px;width: 80%" class="input-item-value" v-model="command">
+                <button  @click="sendCommand" class="layui-btn layui-btn-radius" style="margin-top: 20px">发送</button>
+        </div>
+
+
+    </div>
+
+
+</body>
+</html>

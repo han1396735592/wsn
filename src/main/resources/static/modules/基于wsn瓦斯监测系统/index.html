@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>瓦斯监控平台</title>
+<link type="text/css" rel="stylesheet" href="style.css">
+</head>
+<script src="js/jquery.js"></script>
+
+<body>
+  <div class="allpage">
+  	  <center><h1>瓦斯监测平台</h1></center>
+  	  <div class="center">
+  	  	  <div class="left">
+  	  	  	 <ul>
+  	  	  	 	<a href="data.html"><li>数据管理</li></a>
+  	  	  	 	<a><li>节点控制</li></a>
+  	  	  	 </ul>
+  	  	  </div>
+  	  	  <div class="right" id="right">
+  	  	  	 <table class="table_info" id="info" border="1">
+  	  	  	 	 <tr>
+  	  	  	 	 	<th>传感器节点</th>
+  	  	  	 	 	<th>IEEE地址</th>
+  	  	  	 	 	<th>父节点地址</th>
+  	  	  	 	 	<th>节点地址</th>
+  	  	  	 	 	<th>状态</th>
+  	  	  	 	 </tr>
+  	  	  	 </table>
+  	  	  </div>
+  	  </div>
+  </div>
+  <script type="text/javascript">
+	    //定义一个字符串数组存放url
+	    var url=["http://localhost:8080/AirPressureAltitudeSensorController/last","http://localhost:8080/FlameSensorVoController/last","http://localhost:8080/FlammableGasSensorVoController/last","http://localhost:8080/temAndHum/last"]
+		for(var i=0;i<url.length;i++){
+         $.ajax({
+			 type:"GET",
+			 dataType:"json",
+			 url:url[i],
+			 success:function(msg){
+				 console.log("sssssssss");
+				 console.log(msg);
+				 console.log(msg.data.sensorType);
+	             senson_namer=msg.data.sensorType;
+			     ieeeadd=msg.data.ieeeAddress;
+			     paradd=msg.data.parentAddress;
+			     add=msg.data.address;
+				 console.log(ieeeadd);
+			   //将数据放入table
+				 var info="<tr><td>"+senson_namer+"</td><td>"+ieeeadd+"</td><td>"+paradd+"</td><td>"+add+"</td><td>"+null+"</td></tr>";
+				$("#info").append(info); 
+			 }
+		 })
+		}
+
+</script>
+</body>
+
+</html>

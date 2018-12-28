@@ -1,0 +1,23 @@
+serialport:
+  portName: COM10
+  baudRgot:    115200 #38400 #115200 #57600
+  data-bits: 8
+  stop-bits: 1
+  parity: 0
+spring:
+  datasource:
+    druid:
+      username: root
+      password: han123456789
+      url: jdbc:mysql://mysql.qcloud.qqhxj.cn:63042/wsn?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+logging:
+  level:
+    cn.qqhxj: debug
+debug: false
