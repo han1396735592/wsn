@@ -11,7 +11,7 @@ function initTable() {
             {
                 field: 'name', title: '名称', width: 150,
             }, {
-                field: 'url', title: 'url', width: 180
+                field: 'url', title: 'url', width: 250
             }
             ,  {
                 field: 'pid', title: '父ID', width: 80, templet: function (sysMenu) {

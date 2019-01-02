@@ -3,6 +3,7 @@ package cn.qqhxj.wsn.modules.wsn.service.impl;
 import cn.qqhxj.wsn.modules.wsn.dao.SensorVoDao;
 import cn.qqhxj.wsn.modules.wsn.service.SensorVoService;
 import cn.qqhxj.wsn.modules.wsn.vo.SensorVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,4 +13,8 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class SensorVoServiceImpl extends ServiceImpl<SensorVoDao, SensorVo> implements SensorVoService {
+    @Override
+    public SensorVo getByIeeeAddress(String address) {
+        return baseMapper.selectOne(new QueryWrapper<SensorVo>().eq("ieee_address",address));
+    }
 }

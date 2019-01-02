@@ -67,6 +67,7 @@ public class SerialController {
         SerialPort serialPort = SerialContext.getSerialPort();
         log.info("关闭了串口：{}"+serialPort);
         serialPort.close();
+        SerialContext.setSerialPort(null);
         return true;
     }
 

@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <TITLE>温湿度在线监控 </TITLE>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/highcharts.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $(document).ready(function () {
+                Highcharts.setOptions({
+                    global: {
+                        useUTC: false
+                    }
+                });
+
+                var chart;
+                var color_cc = '';
+                var rdm = Math.random();
+
+                var warnLineValue = 30;
+
+
+                var initData = [];
+
+                $.get("http://localhost:8080/temAndHum/getByTimeLimit?len=10", function (res) {
+                    console.log(res.data)
+                    initData = res.data
+                })
+
+                window.setTimeout(function () {
+                    $('#container').highcharts({
+                        chart: {
+                            type: 'spline',
+                            animation: Highcharts.svg, // don't animate in old IE
+                            backgroundcolor: 'red',
+                            marginRight: 10,
+                            events: {
+                                load: function () {
+                                    // set up the updating of the chart each second
+                                    var series = this.series[0];
+                                    var series1 = this.series[1];
+                                    var id = 128;
+
+                                    setInterval(function () {
+                                        //加载ajax
+                                        var value_num;
+
+                                        id++;
+                                        $.ajax({
+                                            type: "GET",
+                                            dataType: "json",
+                                            url: "http://localhost:8080/temAndHum/getById?id=" + id,
+                                            success: function (msg) {
+
+                                                value_num = msg.data.humidityValue;
+                                                // console.log(msg.data);
+                                                if (value_num > warnLineValue) {
+                                                    color_cc = 'red';
+                                                } else {
+                                                    color_cc = 'green';
+                                                }
+                                                series.color = color_cc;
+                                                console.log()
+                                                var x = (new Date()).getTime(), // current time
+                                                    y = value_num;
+                                                series.addPoint([x, y], true, true);
+                                                series1.addPoint([x, warnLineValue], true, true);
+                                            }
+
+
+                                        })
+                                    }, 2000);
+                                }
+                            }
+                        },
+                        credits: {
+                            enabled: true,
+                            text: '',
+                            href: 'www.qqhxj.cn'
+                        },
+
+                        title: {
+                            text: '温度--s'
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickPixelInterval: 100
+                        },
+                        yAxis: {
+                            title: {
+                                text: '温度--s'
+                            },
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                                    Highcharts.numberFormat(this.y, 2);
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        exporting: {
+                            enabled: false
+                        },
+
+                        series: [{
+                            name: '温度值',
+                            animate: true,
+                            data: (function () {
+                                // generate an array of random data
+                                var data = [],
+                                    time = (new Date()).getTime(),
+                                    i;
+                                for (i = -19; i <= 0; i++) {
+                                    data.push({
+                                        x: time + i * 1000,
+                                        y: Math.random()
+                                    });
+                                }
+                                return data;
+                            })()
+                        }, {
+                            name: '警戒线',
+                            color: '#b341ce',
+                            data: (function () {
+                                // generate an array of random data
+                                var data = [],
+                                    time = (new Date()).getTime(),
+                                    i;
+                                for (i = -19; i <= 0; i++) {
+                                    data.push({
+                                        x: time + i * 1000,
+                                        y: warnLineValue
+                                    });
+                                }
+                                return data;
+                            })()
+                        }]
+                    });
+                },3000)
+
+
+
+            });
+
+        });
+    </script>
+</head>
+
+<BODY>
+<div id="container" style="width:700px;height:400px;margin:0 auto;"></div>
+</BODY>
+</HTML>

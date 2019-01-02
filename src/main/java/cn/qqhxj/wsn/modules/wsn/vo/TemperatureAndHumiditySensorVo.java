@@ -17,19 +17,15 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @TableName("TemperatureAndHumiditySensorVo")
-public class TemperatureAndHumiditySensorVo extends TemperatureAndHumiditySensor {
-
+public class TemperatureAndHumiditySensorVo {
     @TableId(type = IdType.AUTO)
     private Integer id;
-
     private Date generateTime;
+    protected Float temperatureValue;
+    protected Float humidityValue;
+    private Integer sensorVoId;
 
-    public TemperatureAndHumiditySensorVo(byte[] bytes){
-        super(bytes);
-    }
-
-    public TemperatureAndHumiditySensorVo(TemperatureAndHumiditySensor temperatureAndHumiditySensor) {
-        BeanUtils.copyProperties(temperatureAndHumiditySensor, this);
-        this.generateTime = new Date();
+    public TemperatureAndHumiditySensorVo(TemperatureAndHumiditySensor temperatureAndHumiditySensor){
+        BeanUtils.copyProperties(temperatureAndHumiditySensor,this);
     }
 }

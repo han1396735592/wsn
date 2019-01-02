@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author han xinjian
  * @date 2018-12-29 14:15
@@ -18,12 +20,12 @@ public class SensorVo {
 
     private String sensorType;
 
-    private String ieeeAddress = "";
+    private String ieeeAddress;
 
-    private String parentAddress = "";
+    private String parentAddress ;
 
-    private String address = "";
+    private String address ;
 
-    private Data LastReceiveDataTime;
+    private Date lastReceiveDataTime;
 
 }

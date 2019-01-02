@@ -1,7 +1,6 @@
 package cn.qqhxj.wsn.modules.wsn.controller;
 
 import cn.qqhxj.common.web.WebResult;
-import cn.qqhxj.common.wsn.sensor.Sensor;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.annotations.ApiOperation;
@@ -13,14 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 
 /**
  * @author han xinjian
  * @date 2018-12-24 16:26
  **/
-public abstract class BaseController<S, T extends Sensor> {
+public abstract class BaseController<S, T> {
     @Autowired
     protected IService<T> service;
 
@@ -38,7 +36,7 @@ public abstract class BaseController<S, T extends Sensor> {
     @ApiOperation("获取最后采集的数据")
     @GetMapping("last")
     public WebResult<T> last() {
-        return WebResult.ok(service.getOne(new QueryWrapper<T>().orderByDesc("id")));
+        return WebResult.ok(service.getOne(new QueryWrapper<T>().orderByDesc("id").last("limit 1")));
     }
 
 
@@ -49,24 +47,16 @@ public abstract class BaseController<S, T extends Sensor> {
     }
 
     @GetMapping("getByTimeLimit")
-    @ApiOperation("根据id获取")
+    @ApiOperation("根据时间段获取数据")
     public WebResult<List<T>> getById(@RequestParam(required = false) String start,
-                                      @RequestParam(required = false) String end) {
+                                      @RequestParam(required = false) String end,
+                                      @RequestParam(required = false,defaultValue = "10") String len) {
 
         if (StringUtils.isEmpty(end)) {
             end = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         }
-        List<T> list = service.list(new QueryWrapper<T>().le(!StringUtils.isEmpty(end), "generate_time", end).ge(!StringUtils.isEmpty(start), "generate_time", start));
+        List<T> list = service.list(new QueryWrapper<T>().le(!StringUtils.isEmpty(end), "generate_time", end).ge(!StringUtils.isEmpty(start), "generate_time", start).last("limit "+len));
         return WebResult.ok(list);
-    }
-
-
-    @GetMapping("getTypeCount")
-    @ApiOperation("获取的数量")
-    public WebResult<List<Map<String, Object>>> getTypeCount() {
-        QueryWrapper<T> wrapper = new QueryWrapper<T>();
-        List<Map<String, Object>> maps = service.listMaps(wrapper.groupBy("ieee_address").select("parent_address ,ieee_address,address,sensor_type "));
-        return WebResult.ok(maps);
     }
 
 }

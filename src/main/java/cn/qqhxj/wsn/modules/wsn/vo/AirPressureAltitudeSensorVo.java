@@ -1,12 +1,10 @@
 package cn.qqhxj.wsn.modules.wsn.vo;
 
-import cn.qqhxj.common.wsn.sensor.AirPressureAltitudeSensor;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 
@@ -17,22 +15,19 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @TableName("AirPressureAltitudeSensorVo")
-public class AirPressureAltitudeSensorVo extends AirPressureAltitudeSensor{
+public class AirPressureAltitudeSensorVo {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     private Date generateTime;
 
+    private Integer sensorVoId;
+
+    protected Float temperatureValue;
+
+    protected Float airPressureValue;
 
 
-    public AirPressureAltitudeSensorVo(byte[] bytes) {
-        super(bytes);
-        generateTime = new Date();
-    }
 
-    public AirPressureAltitudeSensorVo(AirPressureAltitudeSensor airPressureAltitudeSensor) {
-        BeanUtils.copyProperties(airPressureAltitudeSensor, this);
-        this.generateTime = new Date();
-    }
 }
