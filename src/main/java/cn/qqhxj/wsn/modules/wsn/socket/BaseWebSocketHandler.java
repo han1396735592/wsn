@@ -1,13 +1,12 @@
 package cn.qqhxj.wsn.modules.wsn.socket;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -15,62 +14,25 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @date 2018-12-26 13:06
  **/
 @Slf4j
-//@ServerEndpoint("wsn")
 @Component
-public class BaseWebSocketHandler<T> {
-
-    private static CopyOnWriteArraySet<BaseWebSocketHandler> webSocketSet
-            = new CopyOnWriteArraySet<BaseWebSocketHandler>();
-
-    private Session session;
+public class BaseWebSocketHandler extends TextWebSocketHandler {
 
 
-    @OnClose
-    public void onClose() {
-        webSocketSet.remove(this);  //从set中删除
+    private static CopyOnWriteArraySet<WebSocketSession> socketSessions = new CopyOnWriteArraySet<>();
+
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        socketSessions.add(session);
     }
 
-
-    @OnOpen
-    public void onOpen(Session session) {
-        this.session = session;
-        webSocketSet.add(this);     //加入set中
-        log.info("欢迎id={}你的加入成功" , session.getId());
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        socketSessions.remove(session);
     }
 
-    public void sendMessage(String string) throws IOException {
-        this.session.getBasicRemote().sendText(JSONObject.toJSONString(string));
-        //this.session.getAsyncRemote().sendText(message);
+    @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        System.out.println(message.getPayload());
     }
-
-    public void senData(T t) throws IOException {
-        this.session.getBasicRemote().sendText(JSONObject.toJSONString(t));
-        //this.session.getAsyncRemote().sendText(message);
-    }
-
-    public static <T> void sendMessageToAll(String str) throws IOException {
-        for (BaseWebSocketHandler item : webSocketSet) {
-            try {
-                item.sendMessage(str);
-            } catch (IOException e) {
-                continue;
-            }
-        }
-    }
-
-
-    /**
-     * 群发自定义消息
-     */
-    public static <T> void sendDataToAll(T t) throws IOException {
-        for (BaseWebSocketHandler item : webSocketSet) {
-            try {
-                item.senData(t);
-            } catch (IOException e) {
-                continue;
-            }
-        }
-    }
-
-
 }

@@ -28,7 +28,6 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
     }
-
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("api文档")
@@ -36,5 +35,7 @@ public class SwaggerConfig {
                 .version("1.0")
                 .build();
     }
+
+
 
 }
